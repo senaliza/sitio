@@ -1,0 +1,14 @@
+Coloque aquí los catálogos en PDF que se ofrecen para descarga en la página "Catálogo".
+Conserve exactamente estos nombres de archivo (los usa el sitio):
+
+  catalogo-general.pdf
+  catalogo-rotulos.pdf
+  catalogo-senalizacion.pdf
+  catalogo-senalizacion-industrial.pdf
+  catalogo-viniles.pdf
+  catalogo-personalizados.pdf
+
+catalogo-senalizacion.pdf y catalogo-senalizacion-industrial.pdf ya son los
+definitivos. Los demás siguen siendo PDFs de muestra; reemplácelos cuando
+tenga los definitivos.
+Para añadir o quitar catálogos, edite la lista "catalogos" en src/pages/Catalogo.jsx.

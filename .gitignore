@@ -1,0 +1,13 @@
+node_modules/
+.env
+dist/
+*.log
+.claude/settings.local.json
+
+# Comprobantes de pago y archivos de cotización: contienen PII
+# (cédulas, teléfonos, montos). Nunca deben versionarse.
+server/uploads/privado/*
+!server/uploads/privado/.gitkeep
+
+# macOS
+.DS_Store
