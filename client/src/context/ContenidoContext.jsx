@@ -5,8 +5,8 @@ const ContenidoContext = createContext(null);
 
 const fallback = {
   textos: {
-    hero_titulo: 'Soluciones visuales que destacan su marca',
-    hero_subtitulo: '',
+    hero_titulo: 'Especialistas en Señalética, Acrílicos y Seguridad Vial e Industrial',
+    hero_subtitulo: 'Empresa con 15 años de experiencia ofreciendo soluciones publicitarias para su empresa',
     mision: 'Brindar soluciones de señalización y rotulación de alta calidad.',
     vision: 'Ser la empresa líder en soluciones visuales y señalización.',
     mensaje_destacado: 'Soluciones visuales para empresas de todo el país.',
@@ -26,6 +26,10 @@ const fallback = {
 
 export function ContenidoProvider({ children }) {
   const [data, setData] = useState(fallback);
+  // `cargado` indica que ya llegó (o falló) la respuesta del backend. Sirve
+  // para no mostrar textos por defecto que luego cambian: los componentes
+  // pueden esperar a que sea true antes de pintar contenido editable.
+  const [cargado, setCargado] = useState(false);
 
   useEffect(() => {
     api.contenido()
@@ -33,14 +37,15 @@ export function ContenidoProvider({ children }) {
         textos: { ...fallback.textos, ...d.textos },
         contacto: { ...fallback.contacto, ...d.contacto },
       }))
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setCargado(true));
   }, []);
 
-  const valor = useMemo(() => data, [data]);
+  const valor = useMemo(() => ({ ...data, cargado }), [data, cargado]);
   return <ContenidoContext.Provider value={valor}>{children}</ContenidoContext.Provider>;
 }
 
-export const useContenido = () => useContext(ContenidoContext) || fallback;
+export const useContenido = () => useContext(ContenidoContext) || { ...fallback, cargado: false };
 
 export function linkWhatsApp(numero, mensaje = '') {
   const n = (numero || '').replace(/\D/g, '');

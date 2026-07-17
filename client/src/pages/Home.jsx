@@ -24,7 +24,7 @@ const garantias = [
 ];
 
 export default function Home() {
-  const { textos } = useContenido();
+  const { textos, cargado } = useContenido();
   const [destacados, setDestacados] = useState([]);
 
   useEffect(() => {
@@ -46,9 +46,18 @@ export default function Home() {
               <span style={{ background: '#60BB4D' }} />
               <span style={{ background: '#FEE40E' }} />
             </div>
-            <h1 className="hero-titulo">{textos.hero_titulo}</h1>
-            {textos.hero_subtitulo && (
-              <p className="hero-sub">{textos.hero_subtitulo}</p>
+            {cargado ? (
+              <>
+                <h1 className="hero-titulo">{textos.hero_titulo}</h1>
+                {textos.hero_subtitulo && (
+                  <p className="hero-sub">{textos.hero_subtitulo}</p>
+                )}
+              </>
+            ) : (
+              <div className="hero-skeleton" aria-hidden>
+                <span /><span /><span />
+                <span className="hero-skeleton-sub" />
+              </div>
             )}
             <div className="hero-rot">
               Fabricamos{' '}
@@ -222,6 +231,20 @@ export default function Home() {
         .hero-titulo { color: var(--azul-900); font-family: var(--fuente-display);
           font-size: clamp(2.45rem, 6.2vw, 4.75rem); font-weight: 800; line-height: 1.0;
           letter-spacing: -0.025em; margin-top: 12px; }
+
+        /* Placeholder mientras carga el contenido del backend: evita mostrar
+           el texto por defecto y que luego cambie (parpadeo). Reserva un alto
+           similar al título real para no descuadrar el layout. */
+        .hero-skeleton { margin-top: 12px; display: grid; gap: 14px; max-width: 620px; }
+        .hero-skeleton span { display: block; height: clamp(38px, 6vw, 66px); border-radius: 12px;
+          background: linear-gradient(90deg, rgba(9,76,159,0.07) 25%, rgba(9,76,159,0.15) 37%, rgba(9,76,159,0.07) 63%);
+          background-size: 400% 100%; animation: hero-shimmer 1.4s ease infinite; }
+        .hero-skeleton span:nth-child(1) { width: 96%; }
+        .hero-skeleton span:nth-child(2) { width: 82%; }
+        .hero-skeleton span:nth-child(3) { width: 58%; }
+        .hero-skeleton .hero-skeleton-sub { height: 20px; width: 70%; margin-top: 10px; border-radius: 8px; }
+        @keyframes hero-shimmer { from { background-position: 100% 0; } to { background-position: 0 0; } }
+        @media (prefers-reduced-motion: reduce) { .hero-skeleton span { animation: none; } }
         .hero-sub { color: var(--texto-suave); font-size: 1.16rem; margin: 20px 0 16px; max-width: 520px; }
         .hero-rot { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; color: var(--gris-600);
           font-weight: 600; font-size: 1rem; margin-bottom: 30px; }
