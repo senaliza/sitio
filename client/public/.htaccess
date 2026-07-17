@@ -1,0 +1,21 @@
+# SPA fallback para Apache / LiteSpeed (Hostinger).
+# Cualquier ruta que NO sea un archivo o carpeta real se sirve como
+# index.html con estado 200, para que React Router resuelva la navegación
+# del lado del cliente (ej. /productos, /nosotros, /catalogo, recargas y
+# enlaces directos dejan de dar 404).
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # No reescribir el propio index.html
+  RewriteRule ^index\.html$ - [L]
+
+  # Si la petición corresponde a un archivo o directorio existente
+  # (JS, CSS, imágenes, PDFs, etc.), servirlo tal cual.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Todo lo demás → index.html (la app se encarga del enrutamiento).
+  RewriteRule ^ index.html [L]
+</IfModule>
